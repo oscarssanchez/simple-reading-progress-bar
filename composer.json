@@ -1,0 +1,17 @@
+{
+    "name": "oscar/simple-reading-progress-bar",
+    "authors": [
+        {
+            "name": "Oscar Sanchez",
+            "email": "osanpk@comunidad.unam.mx"
+        }
+    ],
+    "require": {
+        "php": ">=5.4"
+    },
+    "require-dev": {
+        "wp-coding-standards/wpcs": "*",
+        "wimg/php-compatibility": "*",
+        "dealerdirect/phpcodesniffer-composer-installer": "^0.4.4"
+    }
+}

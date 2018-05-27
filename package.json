@@ -1,0 +1,25 @@
+{
+  "name": "simple-reading-progress-bar",
+  "version": "1.0.0",
+  "description": "A simple reading progress bar for WordPress",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oscarssanchez/simple-reading-progress-bar.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/oscarssanchez/simple-reading-progress-bar/issues"
+  },
+  "homepage": "https://github.com/oscarssanchez/simple-reading-progress-bar#readme",
+  "devDependencies": {
+    "eslint": "^4.19.1",
+    "grunt-cli": "^1.2.0",
+    "jscs": "^3.0.7",
+    "jshint": "^2.9.5"
+  }
+}
