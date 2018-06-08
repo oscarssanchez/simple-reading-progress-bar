@@ -12,14 +12,14 @@ defined( 'WPINC' ) or die;
 	<form method="post" action="<?php admin_url( 'admin-post.php' ); ?>" class="simple-reading-progress-bar-form postbox">
 		<input type="hidden" name="action" value="simple-reading-progress-bar-save">
 		<?php wp_nonce_field( self::NONCE_ACTION, self::NONCE_NAME ); ?>
-		<table>
+		<table class="form-table">
 			<tr valign="top">
 				<th scope="row"><label>Bar Color</label></th>
 				<td><input type="text" class="colorpicker"></td>
 			</tr>
 			<tr valign="top">
 				<th scope="row"><label>Bar Height</label></th>
-				<td><input type="number" class="barheight">px</td>
+				<td><input type="number" class="barheight"> px</td>
 			</tr>
 			<tr valign="top">
 				<th scope="row"><label>Bar Position</label></th>
