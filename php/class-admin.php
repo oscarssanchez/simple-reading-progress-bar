@@ -19,12 +19,28 @@ class Admin {
 	 * @var string
 	 */
 	const SLUG = 'simple-reading-progress-bar';
+
+	/**
+	 * The nonce name.
+	 *
+	 * @var string
+	 */
+	const NONCE_NAME = 'simple-reading-progress-bar-nonce';
+
+	/**
+	 * The nonce action
+	 *
+	 * @var string
+	 */
+	const NONCE_ACTION = 'simple-reading-progress-bar-update';
+
 	/**
 	 * Admin initializer. Hooks necessary admin functions.
 	 */
 	public function init() {
 		add_action( 'admin_menu', array( $this, 'admin_menus' ) );
 		add_action( 'init', array( $this, 'textdomain' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
 	}
 
 	/**
@@ -51,6 +67,14 @@ class Admin {
 	 * Renders the plugin's settings page.
 	 */
 	public function render_options_page() {
-		echo 'HELLO PLUGIN';
+		include( dirname( __FILE__ ) . '/../templates/admin-page.php' );
+	}
+
+	/**
+	 * Enqueues the scripts and styles needed for the admin page.
+	 */
+	public function admin_enqueue_scripts() {
+		wp_enqueue_script( 'simple-progress-reading-bar', plugins_url( '/js/admin-simple-progress-reading-bar.js', dirname( __FILE__ ) ), array( 'wp-color-picker' ), Plugin::VERSION, true );
+		wp_enqueue_style( 'simple-progress-reading-bar', plugins_url( '/css/admin-simple-progress-reading-bar.css', dirname( __FILE__ ) ), array( 'wp-color-picker' ), Plugin::VERSION );
 	}
 }

@@ -62,6 +62,8 @@ class Plugin {
 		$this->components        = new \stdClass();
 		$this->components->admin = new Admin();
 		$this->components->admin->init();
+		$this->components->bar = new Bar();
+		$this->components->bar->init_bar();
 	}
 
 	/**
@@ -69,5 +71,6 @@ class Plugin {
 	 */
 	public function load_files() {
 		require_once dirname( __FILE__ ) . '/class-admin.php';
+		require_once dirname( __FILE__ ) . '/class-bar.php';
 	}
 }
