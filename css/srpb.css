@@ -7,7 +7,7 @@ progress {
   height: 10px;
   border: none;
   background-color: transparent;
-  color: red;
+  color: blue;
   -webkit-appearance: none;
   -moz-appearance: none;
 }
@@ -17,9 +17,9 @@ progress::-webkit-progress-bar {
 }
 
 progress::-webkit-progress-value {
-  background-color: red;
+  background-color: #0A246A;
 }
 
 progress::-moz-progress-bar {
-  background-color: red;
+  background-color: blue;
 }
