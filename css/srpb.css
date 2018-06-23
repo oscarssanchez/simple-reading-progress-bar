@@ -17,7 +17,7 @@ progress::-webkit-progress-bar {
 }
 
 progress::-webkit-progress-value {
-  background-color: #0A246A;
+  background-color: yellow;
 }
 
 progress::-moz-progress-bar {

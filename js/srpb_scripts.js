@@ -1,16 +1,16 @@
-jQuery( document ).on( 'ready', function() {
+var simpleProgressBar = document.addEventListener( 'DOMContentLoaded', function() {
 	'use strict';
-	var winHeight = jQuery( window ).height(),
-		docHeight = jQuery( document ).height(),
-		progressBar = jQuery( 'progress' ),
+	var winHeight = window.innerHeight,
+		docHeight = document.body.clientHeight,
+		progressBar = document.getElementById( 'progressBar' ),
 		max, value;
 
 	/* Set the max scrollable area */
 	max = docHeight - winHeight;
-	progressBar.attr( 'max', max );
+	progressBar.setAttribute( 'max', max );
 
-	jQuery( document ).on( 'scroll', function() {
+	document.addEventListener( 'scroll', function() {
 		value = jQuery( window ).scrollTop();
-		progressBar.attr( 'value', value );
+		progressBar.setAttribute( 'value', value );
 	} );
-});
+} ) ;
