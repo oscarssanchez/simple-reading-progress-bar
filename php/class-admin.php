@@ -115,7 +115,7 @@ class Admin {
 	public function save_settings() {
 		$keys   = array_keys( $this->settings );
 		$verify = (
-			! empty( $_POST[ $keys[0] ] )
+			'bar_color' !== ( $_POST[ $keys[0] ] )
 			&&
 			! empty( $_POST[ $keys[1] ] )
 			&&

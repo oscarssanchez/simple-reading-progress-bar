@@ -16,7 +16,7 @@ defined( 'WPINC' ) or die;
 		<table class="form-table">
 			<tr valign="top">
 				<th scope="row"><label><?php echo esc_html( $this->settings['bar_color'] ); ?></label></th>
-				<td><input name="<?php echo esc_attr( $value[0] ); ?>" type="text" class="colorpicker" value="<?php echo esc_attr( $value[0] ); ?>"></td>
+				<td><input name="<?php echo esc_attr( $value[0] ); ?>" type="text" id="color-<?php echo $value[0]; ?>" value="<?php echo esc_attr( $value[0] ); ?>" class="colorpicker" autocomplete="off" /></td>
 			</tr>
 			<tr valign="top">
 				<th scope="row"><label><?php echo esc_html( $this->settings['bar_height'] ); ?></label></th>
