@@ -1,6 +1,6 @@
-var simpleProgressBar = document.addEventListener( 'DOMContentLoaded', function() {
+let simpleProgressBar = document.addEventListener( 'DOMContentLoaded', function() {
 	'use strict';
-	var winHeight = window.innerHeight,
+	let winHeight = window.innerHeight,
 		docHeight = document.body.clientHeight,
 		progressBar = document.getElementById( 'progressBar' ),
 		max, value;
