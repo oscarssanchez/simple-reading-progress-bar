@@ -4,6 +4,7 @@
   "description": "A simple reading progress bar for WordPress",
   "main": "index.js",
   "scripts": {
+    "precommit": "./node_modules/wp-dev-lib/scripts/pre-commit",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -19,7 +20,9 @@
   "devDependencies": {
     "eslint": "^4.19.1",
     "grunt-cli": "^1.2.0",
+    "husky": "^4.2.5",
     "jscs": "^3.0.7",
-    "jshint": "^2.9.5"
+    "jshint": "^2.9.5",
+    "wp-dev-lib": "github:xwp/wp-dev-lib"
   }
 }
