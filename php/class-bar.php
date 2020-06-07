@@ -13,13 +13,68 @@ namespace SimpleReadingProgressBar;
  * @package SimpleReadingProgressBar
  */
 class Bar {
+
+	/**
+	 * Instance of the plugin.
+	 *
+	 * @var object
+	 */
+	public $plugin;
+
+	/**
+	 * Instantiate this class.
+	 *
+	 * @param object $plugin Instance of the plugin.
+	 */
+	public function __construct( $plugin ) {
+		$this->plugin = $plugin;
+	}
+
 	/**
 	 * Initialize the Bar
 	 */
 	public function init_bar() {
 		add_action( 'wp_footer', array( $this, 'render_bar' ) );
+		add_action( 'wp_head', array( $this, 'bar_styles' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'load_bar_styles' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'load_bar_scripts' ) );
+	}
+
+	/**
+	 * Renders a style tag at the start of the page.
+	 *
+	 * This is so that the styling can be dynamic without using JS.
+	 */
+	public function bar_styles() {
+		$settings = $this->plugin->components->admin->settings;
+		?>
+		<style>
+			progress {
+				position: fixed;
+				left: 0;
+				<?php echo esc_attr( $settings['bar_position']['value'] ); ?>: 0;
+				z-index: 9999999;
+				width: 100%;
+				height: <?php echo esc_attr( $settings['bar_height']['value'] ); ?>;
+				border: none;
+				background-color: transparent;
+				-webkit-appearance: none;
+				-moz-appearance: none;
+			}
+
+			progress::-webkit-progress-bar {
+				background-color: transparent;
+			}
+
+			progress::-webkit-progress-value {
+				background-color: <?php echo esc_attr( $settings['bar_color']['value'] ); ?>;
+			}
+
+			progress::-moz-progress-bar {
+				background-color: <?php echo esc_attr( $settings['bar_color']['value'] ); ?>;
+			}
+		</style>
+		<?php
 	}
 
 	/**
@@ -42,7 +97,7 @@ class Bar {
 	 */
 	public function load_bar_styles() {
 		if ( is_single() ) {
-			wp_enqueue_style( 'srpb', plugins_url( '../css/srpb.css', __FILE__ ) );
+			wp_enqueue_style( 'srpb', plugins_url( '../css/srpb.css', __FILE__ ), array(), Plugin::VERSION );
 		}
 	}
 

@@ -62,7 +62,7 @@ class Plugin {
 		$this->components        = new \stdClass();
 		$this->components->admin = new Admin();
 		$this->components->admin->init();
-		$this->components->bar = new Bar();
+		$this->components->bar = new Bar( $this );
 		$this->components->bar->init_bar();
 	}
 

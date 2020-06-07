@@ -52,20 +52,12 @@ class Admin {
 	 * Hooks necessary admin functions and sets bar settings.
 	 */
 	public function init() {
-		$this->settings = array(
-			'bar_color'    => __( 'Bar Color', 'simple-reading-progress-bar' ),
-			'bar_height'   => __( 'Bar Height', 'simple-reading-progress-bar' ),
-			'bar_position' => __( 'Bar Position', 'simple-reading-progress-bar' ),
-		);
+		$this->settings = $this->get_settings();
 
 		add_action( 'admin_menu', array( $this, 'admin_menus' ) );
 		add_action( 'admin_post_simple-reading-progress-bar-save', array( $this, 'save_settings' ) );
 		add_action( 'init', array( $this, 'textdomain' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
-
-		if ( isset( $_GET['empty_fields'] ) ) {
-			add_action( 'admin_notices', array( $this, 'empty_fields_notice' ) );
-		}
 	}
 
 	/**
@@ -81,12 +73,7 @@ class Admin {
 		);
 	}
 
-	/**
-	 * Displays an admin notice if a field is left empty.
-	 */
-	public function empty_fields_notice() {
-			include( ( dirname( __FILE__ ) . '/../templates/empty-fields.php' ) );
-	}
+
 	/**
 	 * Loads the plugin textdomain, enables plugin translation.
 	 */
@@ -113,25 +100,32 @@ class Admin {
 	 * Processes and saves the Bar settings.
 	 */
 	public function save_settings() {
-		$keys   = array_keys( $this->settings );
-		$verify = (
-			'bar_color' !== ( $_POST[ $keys[0] ] )
-			&&
-			! empty( $_POST[ $keys[1] ] )
-			&&
-			isset( $_POST[ $keys[2] ], $_POST[ self::NONCE_NAME ] )
-			&&
-			wp_verify_nonce( sanitize_key( wp_unslash( $_POST[ self::NONCE_NAME ] ) ), self::NONCE_ACTION )
-		);
-
-		if ( $verify ) {
+		if ( isset( $_POST[ self::NONCE_NAME ] ) && wp_verify_nonce( sanitize_key( wp_unslash( $_POST[ self::NONCE_NAME ] ) ), self::NONCE_ACTION ) ) {
 			update_option( self::OPTION, $this->set_option() );
-			wp_redirect( $this->admin_url() . '&updated=true' );
-			exit;
-		} else {
-			wp_redirect( $this->admin_url() . '&empty_fields=true' );
+			wp_safe_redirect( $this->admin_url() . '&updated=true' );
 			exit;
 		}
+	}
+
+	/**
+	 * Gets the bar settings
+	 */
+	public function get_settings() {
+		$value = get_option( SELF::OPTION );
+		return array(
+			'bar_color' => array(
+				'label' => __( 'Bar Color', 'simple-reading-progress-bar' ),
+				'value' => $value['bar_color']
+			),
+			'bar_height' => array(
+				'label' => __( 'Bar Height', 'simple-reading-progress-bar' ),
+				'value' => $value['bar_height']
+			),
+			'bar_position' => array(
+				'label' => __( 'Bar Position', 'simple-reading-progress-bar' ),
+				'value' => $value['bar_position']
+			),
+		);
 	}
 
 	/**
@@ -146,9 +140,9 @@ class Admin {
 	 */
 	public function set_option() {
 		return array(
-			'bar_color'    => $_POST['bar_color'],
-			'bar_height'   => $_POST['bar_height'],
-			'bar_position' => $_POST['bar_position'],
+			'bar_color'    =>  ! empty( $_POST['bar_color'] ) ? sanitize_hex_color( $_POST['bar_color'] ) : '#eeee22',
+			'bar_height'   =>  ( ! empty( $_POST['bar_height'] ) || 0 === $_POST['bar_height'] ) ? intval( $_POST['bar_height'] ) : '10',
+			'bar_position' =>  ! empty( $_POST['bar_position'] ) ? sanitize_text_field( $_POST['bar_position'] ) : 'top'
 		);
 	}
 }
