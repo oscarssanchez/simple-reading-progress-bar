@@ -22,7 +22,7 @@
     "grunt-cli": "^1.2.0",
     "husky": "^4.2.5",
     "jscs": "^3.0.7",
-    "jshint": "^2.9.5",
+    "jshint": "^2.11.1",
     "wp-dev-lib": "github:xwp/wp-dev-lib"
   }
 }
