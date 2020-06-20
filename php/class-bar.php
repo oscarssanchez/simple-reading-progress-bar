@@ -13,7 +13,6 @@ namespace SimpleReadingProgressBar;
  * @package SimpleReadingProgressBar
  */
 class Bar {
-
 	/**
 	 * Instance of the plugin.
 	 *
@@ -55,7 +54,7 @@ class Bar {
 				<?php echo esc_attr( $settings['bar_position']['value'] ); ?>: 0;
 				z-index: 9999999;
 				width: 100%;
-				height: <?php echo esc_attr( $settings['bar_height']['value'] ); ?>;
+				height: <?php echo esc_attr( $settings['bar_height']['value'] . 'px' ); ?>;
 				border: none;
 				background-color: transparent;
 				-webkit-appearance: none;

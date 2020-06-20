@@ -28,20 +28,6 @@ class Admin {
 	const SLUG = 'simple-reading-progress-bar';
 
 	/**
-	 * The nonce name.
-	 *
-	 * @var string
-	 */
-	const NONCE_NAME = 'simple-reading-progress-bar-nonce';
-
-	/**
-	 * The nonce action
-	 *
-	 * @var string
-	 */
-	const NONCE_ACTION = 'simple-reading-progress-bar-update';
-
-	/**
 	 * The option name
 	 */
 	const OPTION = 'simple-reading-progress-bar';
@@ -53,39 +39,9 @@ class Admin {
 	 */
 	public function init() {
 		$this->settings = $this->get_settings();
-
-		add_action( 'admin_menu', array( $this, 'admin_menus' ) );
-		add_action( 'admin_post_simple-reading-progress-bar-save', array( $this, 'save_settings' ) );
+		add_action( 'admin_init', array( $this, 'register_settings' ) );
 		add_action( 'init', array( $this, 'textdomain' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
-	}
-
-	/**
-	 * Creates the plugin's settings page in the settings menu.
-	 */
-	public function admin_menus() {
-		add_options_page(
-			__( 'Simple Reading Progress Bar', 'simple-reading-progress-bar' ),
-			__( 'Simple Reading Progress Bar', 'simple-reading-progress-bar' ),
-			'manage_options',
-			'simple-reading-progress-bar',
-			array( $this, 'render_options_page' )
-		);
-	}
-
-
-	/**
-	 * Loads the plugin textdomain, enables plugin translation.
-	 */
-	public function textdomain() {
-		load_plugin_textdomain( self::SLUG );
-	}
-
-	/**
-	 * Renders the plugin's settings page.
-	 */
-	public function render_options_page() {
-		include( dirname( __FILE__ ) . '/../templates/admin-page.php' );
 	}
 
 	/**
@@ -97,21 +53,31 @@ class Admin {
 	}
 
 	/**
-	 * Processes and saves the Bar settings.
+	 * Loads the plugin textdomain, enables plugin translation.
 	 */
-	public function save_settings() {
-		if ( isset( $_POST[ self::NONCE_NAME ] ) && wp_verify_nonce( sanitize_key( wp_unslash( $_POST[ self::NONCE_NAME ] ) ), self::NONCE_ACTION ) ) {
-			update_option( self::OPTION, $this->set_option() );
-			wp_safe_redirect( $this->admin_url() . '&updated=true' );
-			exit;
-		}
+	public function textdomain() {
+		load_plugin_textdomain( self::SLUG );
 	}
+
+	/**
+	 * Renders the plugin's settings page.
+	 */
+	public function render_settings() {
+			include( dirname( __FILE__ ) . '/../templates/admin-page.php' );
+		}
 
 	/**
 	 * Gets the bar settings
 	 */
 	public function get_settings() {
-		$value = get_option( SELF::OPTION );
+		$defaults = array(
+			'bar_color'    => '#eeee22',
+			'bar_height'   => '10',
+			'bar_position' => 'top'
+	);
+
+		$value = get_option( self::OPTION, $defaults );
+
 		return array(
 			'bar_color' => array(
 				'label' => __( 'Bar Color', 'simple-reading-progress-bar' ),
@@ -129,20 +95,35 @@ class Admin {
 	}
 
 	/**
-	 * Returns the admin url of the plugin.
+	 * Callback to sanitize the bar settings.
+	 *
+	 * @param $settings
+	 * @return mixed
 	 */
-	public function admin_url() {
-		return admin_url( 'options-general.php?page=simple-reading-progress-bar' );
+	public function sanitize_settings( $settings ) {
+		$settings['bar_color']    = ! empty( $settings['bar_color'] ) ? sanitize_hex_color( $settings['bar_color'] ) : '#eeee22';
+		$settings['bar_height']   = ( ! empty( $settings['bar_height'] ) || 0 === $settings['bar_height'] ) ? intval( $settings['bar_height'] ) : '10';
+		$settings['bar_position'] = ! empty( $settings['bar_position'] ) ? sanitize_text_field( $settings['bar_position'] ) : 'top';
+
+		return $settings;
 	}
 
 	/**
-	 * Prepares the options to be saved
+	 * Registers settings on reading page.
 	 */
-	public function set_option() {
-		return array(
-			'bar_color'    =>  ! empty( $_POST['bar_color'] ) ? sanitize_hex_color( $_POST['bar_color'] ) : '#eeee22',
-			'bar_height'   =>  ( ! empty( $_POST['bar_height'] ) || 0 === $_POST['bar_height'] ) ? intval( $_POST['bar_height'] ) : '10',
-			'bar_position' =>  ! empty( $_POST['bar_position'] ) ? sanitize_text_field( $_POST['bar_position'] ) : 'top'
+	public function register_settings() {
+		register_setting(
+			'reading',
+            self::OPTION,
+			array( $this, 'sanitize_settings' )
+		);
+
+		add_settings_field(
+			'simple_reading_progress_bar_settings',
+			'Progress Bar Settings:',
+			array( $this, 'render_settings' ),
+			'reading',
+			'default'
 		);
 	}
 }
