@@ -97,8 +97,8 @@ class Admin {
 	/**
 	 * Callback to sanitize the bar settings.
 	 *
-	 * @param $settings
-	 * @return mixed
+	 * @param $settings. Input settings.
+	 * @return array. Array of settings.
 	 */
 	public function sanitize_settings( $settings ) {
 		$settings['bar_color']    = ! empty( $settings['bar_color'] ) ? sanitize_hex_color( $settings['bar_color'] ) : '#eeee22';
@@ -109,7 +109,7 @@ class Admin {
 	}
 
 	/**
-	 * Registers settings on reading page.
+	 * Registers and adds settings fields on the reading page.
 	 */
 	public function register_settings() {
 		register_setting(
