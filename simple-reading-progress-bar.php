@@ -4,7 +4,7 @@
  * Description: A simple and easy to custom progress bar at the top of your posts.
  * Text Domain: simple-reading-progress-bar
  * Plugin URI: https://github.com/oscarssanchez/simple-reading-progress-bar
- * Version: 1.0
+ * Version: 1.1
  * Author: Oscar Sańchez
  * Author URI: http://oscarssanchez.com
  * License: GPL2
