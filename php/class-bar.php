@@ -45,42 +45,44 @@ class Bar {
 	 * This is so that the styling can be dynamic without using JS.
 	 */
 	public function bar_styles() {
-		$settings = $this->plugin->components->admin->settings;
-		?>
-		<style>
-			progress {
-				position: fixed;
-				left: 0;
+		if ( $this->is_bar_active() ) {
+			$settings = $this->plugin->components->admin->settings;
+			?>
+			<style>
+				progress {
+					position: fixed;
+					left: 0;
 				<?php echo esc_attr( $settings['bar_position']['value'] ); ?>: 0;
-				z-index: 9999999;
-				width: 100%;
-				height: <?php echo esc_attr( $settings['bar_height']['value'] . 'px' ); ?>;
-				border: none;
-				background-color: transparent;
-				-webkit-appearance: none;
-				-moz-appearance: none;
-			}
+					z-index: 9999999;
+					width: 100%;
+					height: <?php echo esc_attr( $settings['bar_height']['value'] . 'px' ); ?>;
+					border: none;
+					background-color: transparent;
+					-webkit-appearance: none;
+					-moz-appearance: none;
+				}
 
-			progress::-webkit-progress-bar {
-				background-color: transparent;
-			}
+				progress::-webkit-progress-bar {
+					background-color: transparent;
+				}
 
-			progress::-webkit-progress-value {
-				background-color: <?php echo esc_attr( $settings['bar_color']['value'] ); ?>;
-			}
+				progress::-webkit-progress-value {
+					background-color: <?php echo esc_attr( $settings['bar_color']['value'] ); ?>;
+				}
 
-			progress::-moz-progress-bar {
-				background-color: <?php echo esc_attr( $settings['bar_color']['value'] ); ?>;
-			}
-		</style>
-		<?php
+				progress::-moz-progress-bar {
+					background-color: <?php echo esc_attr( $settings['bar_color']['value'] ); ?>;
+				}
+			</style>
+			<?php
+		}
 	}
 
 	/**
 	 * Renders the html elements needed for the progress bar.
 	 */
 	public function render_bar() {
-		if ( is_single() ) {
+		if ( $this->is_bar_active() ) {
 			?>
 			<progress value="100" id="progressBar">
 				<div class="progress-container">
@@ -95,7 +97,7 @@ class Bar {
 	 * Enqueues the bar styles.
 	 */
 	public function load_bar_styles() {
-		if ( is_single() ) {
+		if ( $this->is_bar_active() ) {
 			wp_enqueue_style( 'srpb', plugins_url( '../css/srpb.css', __FILE__ ), array(), Plugin::VERSION );
 		}
 	}
@@ -104,8 +106,24 @@ class Bar {
 	 * Enqueues the bar script.
 	 */
 	public function load_bar_scripts() {
-		if ( is_single() ) {
+		if ( $this->is_bar_active() ) {
 			wp_enqueue_script( 'srpb_scripts', plugins_url( '../js/srpb_scripts.js', __FILE__ ), array( 'jquery' ), Plugin::VERSION, true );
+		}
+	}
+
+	/**
+	 * Return whether the bar has been activated for the current post type.
+	 *
+	 * @return bool
+	 */
+	public function is_bar_active() {
+		$settings  = $this->plugin->components->admin->settings;
+		$post_type = get_post_type();
+
+		if ( ! empty( $settings['post_types']['value'][ $post_type ] ) && true === $settings['post_types']['value'][ $post_type ] ) {
+			return true;
+		} else {
+			return false;
 		}
 	}
 }

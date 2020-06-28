@@ -73,23 +73,30 @@ class Admin {
 		$defaults = array(
 			'bar_color'    => '#eeee22',
 			'bar_height'   => '10',
-			'bar_position' => 'top'
+			'bar_position' => 'top',
+			'post_types'   => array(
+				'post' => true
+		)
 	);
 
 		$value = get_option( self::OPTION, $defaults );
 
 		return array(
 			'bar_color' => array(
-				'label' => __( 'Bar Color', 'simple-reading-progress-bar' ),
+				'label' => __( 'Bar Color: ', 'simple-reading-progress-bar' ),
 				'value' => $value['bar_color']
 			),
 			'bar_height' => array(
-				'label' => __( 'Bar Height', 'simple-reading-progress-bar' ),
+				'label' => __( 'Bar Height: ', 'simple-reading-progress-bar' ),
 				'value' => $value['bar_height']
 			),
 			'bar_position' => array(
-				'label' => __( 'Bar Position', 'simple-reading-progress-bar' ),
+				'label' => __( 'Bar Position: ', 'simple-reading-progress-bar' ),
 				'value' => $value['bar_position']
+			),
+			'post_types' => array(
+				'label' => __( 'Display on these post types: ', 'simple-reading-progress-bar' ),
+				'value' => $value['post_types']
 			),
 		);
 	}
@@ -101,6 +108,15 @@ class Admin {
 	 * @return array. Array of settings.
 	 */
 	public function sanitize_settings( $settings ) {
+		/**
+		 * Make this setting actual booleans.
+		 */
+		foreach ( $settings['post_types'] as $post_type => $enabled ) {
+			if( 'on' === $enabled ) {
+				$settings['post_types'][ $post_type ] = true;
+			}
+		}
+
 		$settings['bar_color']    = ! empty( $settings['bar_color'] ) ? sanitize_hex_color( $settings['bar_color'] ) : '#eeee22';
 		$settings['bar_height']   = ( ! empty( $settings['bar_height'] ) || 0 === $settings['bar_height'] ) ? intval( $settings['bar_height'] ) : '10';
 		$settings['bar_position'] = ! empty( $settings['bar_position'] ) ? sanitize_text_field( $settings['bar_position'] ) : 'top';
@@ -114,13 +130,13 @@ class Admin {
 	public function register_settings() {
 		register_setting(
 			'reading',
-            self::OPTION,
+			self::OPTION,
 			array( $this, 'sanitize_settings' )
 		);
 
 		add_settings_field(
 			'simple_reading_progress_bar_settings',
-			'Progress Bar Settings:',
+			'Progress Bar Settings',
 			array( $this, 'render_settings' ),
 			'reading',
 			'default'
