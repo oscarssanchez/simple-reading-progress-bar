@@ -2,3 +2,11 @@
 	padding: 0 1.5em;
 	margin-top: 1em;
 }
+
+.srpb-post-type-list {
+	margin-left: 18px;
+}
+
+.form-table td p.srpb-input {
+	margin-top: 10px;
+}
